@@ -1,0 +1,384 @@
+#include <iostream>
+#include <windows.h>
+#include <time.h> 
+#include <conio.h>
+#include <fstream>
+
+using namespace std;
+
+void SetColor(WORD wAttributes) {
+	HANDLE hOUTPUT = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hOUTPUT, wAttributes);
+}
+
+enum key1 {
+	ENTER = 13, ESC = 27, up = 72, down = 80, rigth = 77, left = 75, Backspace = 8,
+};
+
+int main() {
+	setlocale(LC_ALL, "RUSSIAN");
+	system("chcp 1251");
+	system("cls");
+	int key;
+	int menu = 1;
+lable:
+	srand(time(0));
+	int color = rand() % 9 + 1;
+	SetColor(color);
+	cout << "->\tSTART" << endl;
+	SetColor(0x07);
+	cout << "  \tEXIT" << endl;
+	while (true) {
+		if (_kbhit()) {
+			key = _getch();
+			if (key == down) {
+				system("cls");
+				srand(time(0));
+				int color = rand() % 9 + 1;
+				if (menu == 1) {
+					menu = 2;
+					SetColor(0x07);
+					cout << "  \tSTART" << endl;
+					SetColor(color);
+					cout << "->\tEXIT" << endl;
+				}
+				else if (menu == 2) {
+					menu = 1;
+					SetColor(color);
+					cout << "->\tSTART" << endl;
+					SetColor(0x07);
+					cout << "  \tEXIT";
+				}
+			}
+			if (key == up) {
+				system("cls");
+				srand(time(0));
+				int color = rand() % 9 + 1;
+				if (menu == 1) {
+					menu = 2;
+					SetColor(0x07);
+					cout << "  \tSTART" << endl;
+					SetColor(color);
+					cout << "->\tEXIT";
+				}
+				else if (menu == 2) {
+					menu = 1;
+					SetColor(color);
+					cout << "->\tSTART" << endl;
+					SetColor(0x07);
+					cout << "  \tEXIT" << endl;
+				}
+			}
+			if (key == Backspace) {
+				system("cls");
+				goto lable;
+			}
+			if (key == ENTER) {
+				system("cls");
+				if (menu == 1) {
+					int choice;
+					cout << "\t1 - Caesar  - ecryption" << endl;
+					cout << "\t2 -  XOR    - ecnryption" << endl;
+					cout << "\t\bChoose 1 or 2: " << endl;
+					cin >> choice;
+					if(choice == 1){
+						system("cls");
+						cout << "\t    !Caesar Menu!" << endl;
+						cout << "\t1 - Caesar  - encryption" << endl;
+					    cout << "\t2 - Caesar  - decryption" << endl;
+					    cout << "Enter 1 or 2: " << endl;
+						int menuforcaesar;
+						cin >> menuforcaesar;
+						if(menuforcaesar == 1){
+						system("cls");
+						cout << "Encryption with Caesar Method!" << endl;
+						char file_in_name[255];
+						ifstream file;
+	                    ofstream file_out;
+	                    int size = 0;
+	                    cout << "Enter file name for encryption: " << endl;
+	                    againcaesar:
+	                    cin.getline(file_in_name, 255);
+	                    file.open(file_in_name, ios_base::in | ios_base::binary);
+	                if (file.is_open()) {
+		                file.seekg(0, ios::end);
+		                size = file.tellg();
+		                file.seekg(0, ios::beg);
+		                char *str = new char[size];
+		                file.read(str, size);
+		                file.close();
+		                int key;
+		                cout << "Enter a key: " << endl;
+	 	                cin >> key;
+		                for (int i = 0; i < size; i++) {
+			                str[i] += key;
+		                }
+		                file_out.open(file_in_name, ios_base::out | ios_base::binary);
+	 	                if (file_out.is_open()) {
+			            file_out.write(str, size);
+			            file_out.close();
+		                }
+		                system("cls");
+		                cout << "File is successfully encrypted!" << endl;
+		                Sleep(1500);
+		                system("cls");
+	                    goto lable;
+	                } 
+	            else 
+		        goto againcaesar;
+		    }
+		    else if(menuforcaesar == 2){
+						system("cls");
+						cout << "Decryption with Caesar Method!" << endl;
+						char file_in_name[255];
+						ifstream file;
+	                    ofstream file_out;
+	                    int size = 0;
+	                    cout << "Enter file name for decryption: " << endl;
+	                    againcaesar1:
+	                    cin.getline(file_in_name, 255);
+	                    file.open(file_in_name, ios_base::in | ios_base::binary);
+	                    if (file.is_open()) {
+		                file.seekg(0, ios::end);
+		                size = file.tellg();
+		                file.seekg(0, ios::beg);
+		                char *str = new char[size];
+		                file.read(str, size);
+		                file.close();
+		                int key;
+		                cout << "Enter a key: " << endl;
+	 	                cin >> key;
+		                for (int i = 0; i < size; i++) {
+			                str[i] -= key;
+		                }
+		                file_out.open(file_in_name, ios_base::out | ios_base::binary);
+	 	                if (file_out.is_open()) {
+			            file_out.write(str, size);
+			            file_out.close();
+		                }
+		                system("cls");
+		                cout << "File is successfully decrypted!" << endl;
+		                Sleep(1500);
+		                system("cls");
+	                    goto lable;
+	                }
+	            else
+		        goto againcaesar1;
+			}
+		}	
+					else if(choice == 2){
+						system("cls");
+						cout << "Encryption with - XOR!" << endl;
+						ifstream file;
+	                    ofstream file_out;
+	                    int size = 0;
+	                    char name_in[255];
+	                    cout << "Enter file name for encryption: " << endl;
+	                    againxor:
+	                    cin.getline(name_in, 255);
+	                    file.open(name_in, ios_base::in | ios_base::binary);
+ 	            if (file.is_open()) {
+		                file.seekg(0, ios::end);
+		                size = file.tellg();
+		                file.seekg(0, ios::beg);
+		                char *str = new char[size];
+		                file.read(str, size);
+		                file.close();
+		                int key;
+		                cout << "Enter a key: " << endl;
+		                cin >> key;
+		                int pwd = (char) key;
+		                for (int i = 0; i < size; i++) {
+			                str[i] ^= pwd;
+		                }
+	 	                file_out.open(name_in, ios_base::out | ios_base::binary);
+		                if (file_out.is_open()) {
+			            file_out.write(str, size);
+			            file_out.close();
+		            }
+		            system("cls");
+		            cout << "File is successfully encrypted!" << endl;
+	                cout << "For decryption, encrypt file again" << endl;
+	                Sleep(4000);
+	                system("cls");
+	                goto lable;
+	            }
+ 	            else 
+	 	        goto againxor;
+			}
+			SetColor(color);
+		    cout << endl;
+			}
+				else if (menu == 2) {
+					system("cls");
+					srand(time(0));
+					int color1 = rand() % 9 + 1;
+					SetColor(color1);
+					cout << "\t\bE"<< endl;
+					Sleep(500);
+					SetColor(color);
+					cout << "\tX" << endl;
+					Sleep(500);
+					SetColor(color1);
+					cout << "\t I" << endl;
+					Sleep(500);
+					SetColor(color);
+					cout << "\t  T" << endl;
+					Sleep(500);
+					SetColor(color1);
+					cout << "\t   !" << endl;
+					Sleep(500);
+					SetColor(color);
+					system("cls");
+					cout << "\tПока!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color1);
+					cout << "\t Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color);
+					cout << "\t  Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color1);
+					cout << "\t   Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color);
+					cout << "\t    Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color1);
+					cout << "\t     Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color);
+					cout << "\t      Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color1);
+					cout << "\t       Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color);
+					cout << "\t        Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color1);
+					cout << "\t         Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color);
+					cout << "\t          Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color1);
+					cout << "\t           Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color);
+					cout << "\t            Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color1);
+					cout << "\t             Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color);
+					cout << "\t              Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color1);
+					cout << "\t               Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color);
+					cout << "\t                Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color1);
+					cout << "\t                 Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					cout << "\t                                  Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color1);
+					cout << "\t                                 Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color);
+					cout << "\t                                Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color1);
+					cout << "\t                               Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color);
+					cout << "\t                              Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color1);
+					cout << "\t                             Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color);
+					cout << "\t                            Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color1);
+					cout << "\t                           Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color);
+					cout << "\t                          Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color1);
+					cout << "\t                         Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color);
+					cout << "\t                        Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color1);
+					cout << "\t                       Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color);
+					cout << "\t                      Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color1);
+					cout << "\t                     Bye" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color);
+					cout << "\t                    Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color1);
+					cout << "\t                   Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color);
+					cout << "\t                  Bye!" << endl;
+					Sleep(100);
+					system("cls");
+					SetColor(color1);
+					cout << "\t                 Bye!" << endl;
+					Sleep(100);
+					goto lable1;
+				}
+			}
+		}
+		else {
+			Sleep(1);
+		}
+	}
+	lable1:
+	cin.get(); cin.get();
+}
